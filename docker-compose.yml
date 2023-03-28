@@ -4,8 +4,8 @@ services:
     python:
         build: .
         volumes:
-            - .:/posio
+            - /mnt/posio:/posio
         environment:
             - POSIO_SETTINGS=/app/config.py
         ports:
-            - 5000:5000
+            - 8080:5000
