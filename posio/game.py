@@ -4,6 +4,7 @@ import sqlite3
 import os
 from math import sqrt, pi
 from collections import namedtuple
+from .utils import read_feature_flag
 
 Answer = namedtuple('Answer', ['latitude', 'longitude'])
 Result = namedtuple('Result', ['distance', 'score'])
@@ -116,7 +117,13 @@ class Game:
         # Select every cities in random order
         c = conn.cursor()
 
-        c.execute('SELECT name, country, latitude, longitude FROM cities ORDER BY RANDOM()')  # noqa
+        # One country only mode
+        country = read_feature_flag()
+
+        if country != None:
+            c.execute('SELECT name, country, latitude, longitude FROM cities WHERE country = "'+ country +'" ORDER BY RANDOM()')  # noqa
+        else:
+            c.execute('SELECT name, country, latitude, longitude FROM cities ORDER BY RANDOM()')  # noqa
 
         cities = []
         for name, country, latitude, longitude in c.fetchall():

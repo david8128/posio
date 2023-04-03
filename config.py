@@ -22,6 +22,9 @@ CDN_URL = 'static'
 # List of origins that are allowed to connect to this server.
 CORS_ALLOWED_ORIGINS = '*'
 
+# Feature flag file location
+FEATURE_FLAG_FILE = 'posio/country'
+
 # Host and port the server should listen.
 HOST='0.0.0.0'
 PORT=5000

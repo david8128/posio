@@ -3,6 +3,7 @@
 from flask import render_template, request
 from app import app, socketio
 from .game_master import GameMaster
+from .utils import read_feature_flag
 
 # The max distance used to compute players score
 SCORE_MAX_DISTANCE = app.config.get('SCORE_MAX_DISTANCE')
@@ -32,9 +33,15 @@ game_master = GameMaster(SCORE_MAX_DISTANCE,
                          TIME_BETWEEN_TURNS)
 game_master.start_game()
 
+# Open file for one country only mode
+game_path = read_feature_flag()
 
-@app.route('/')
-@app.route('/game')
+if game_path == None:
+    game_path = '/'
+else:
+    game_path = '/' + game_path
+
+@app.route(game_path)
 def render_game():
     return render_template('game.html',
                            MAX_RESPONSE_TIME=MAX_RESPONSE_TIME,
