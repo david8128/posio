@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posio-deployment
+  labels:
+    app: posio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: posio
+  template:
+    metadata:
+      labels:
+        app: posio
+    spec:
+      containers:
+      - name: posio
+        image: kubernetesui/posio
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        env:
+        - name: POSIO_SETTINGS
+          value: /app/config.py
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posio-service
+spec:
+  selector:
+    app: posio
+  type: LoadBalancer  
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      nodePort: 30080
