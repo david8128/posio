@@ -34,14 +34,13 @@ game_master = GameMaster(SCORE_MAX_DISTANCE,
 game_master.start_game()
 
 # Open file for one country only mode
-game_path = read_feature_flag()
-
-if game_path == None:
-    game_path = '/'
-else:
-    game_path = '/' + game_path
-
-@app.route(game_path)
+#game_path = read_feature_flag()
+#if game_path == None:
+#    game_path = '/'
+#else:
+#    game_path = '/' + game_path
+#@app.route(game_path)
+@app.route('/')
 def render_game():
     return render_template('game.html',
                            MAX_RESPONSE_TIME=MAX_RESPONSE_TIME,

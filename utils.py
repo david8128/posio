@@ -2,16 +2,14 @@
 
 from app import app
 import os
-
-FEATURE_FLAG_FILE = os.getenv('FEATURE_FLAG_FILE', default=app.config.get('FEATURE_FLAG_FILE'))
+from flagsmith import Flagsmith
+import json
 
 def read_feature_flag():
-    try:
-        with open(FEATURE_FLAG_FILE, 'r') as f:
-            line = f.readline()
-            if 'ALL' not in line and 'country=' in line:
-                return line.split('=')[1].strip()
-    except IOError as e:
-        return None
+    flagsmith = Flagsmith(environment_key="jTG9o3HTR97xSnvmRBuP4m") # The method below triggers a network request 
+    flags = flagsmith.get_environment_flags() # Check for a feature 
+    is_enabled = flags.is_feature_enabled("country_flag") # Or, use the value of a feature 
+    if is_enabled:
+        return flags.get_feature_value("country_flag")
 
     return None

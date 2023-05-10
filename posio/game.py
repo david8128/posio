@@ -120,13 +120,18 @@ class Game:
         # One country only mode
         country = read_feature_flag()
 
-        if country != None:
-            c.execute('SELECT name, country, latitude, longitude FROM cities WHERE country = "'+ country +'" ORDER BY RANDOM()')  # noqa
-        else:
+        if country == None:
             c.execute('SELECT name, country, latitude, longitude FROM cities ORDER BY RANDOM()')  # noqa
-
+        else:
+            c.execute('SELECT name, country, latitude, longitude FROM cities WHERE country = "'+ country +'" ORDER BY RANDOM()')  # noqa
+            
+        rows = c.fetchall()
+        if len(rows) == 0:
+            c.execute('SELECT name, country, latitude, longitude FROM cities ORDER BY RANDOM()')
+            rows = c.fetchall()
+        
         cities = []
-        for name, country, latitude, longitude in c.fetchall():
+        for name, country, latitude, longitude in rows:
             cities.append({
                 'name': name,
                 'country': country,
