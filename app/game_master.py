@@ -45,6 +45,9 @@ class GameMaster:
             # Give the user some time between two turns
             socketio.sleep(self.time_between_turns)
 
+            # Update feature flag
+            self.game.cities = self.game.get_cities()
+
     def start_turn(self):
         app.logger.debug('Starting new turn')
 
